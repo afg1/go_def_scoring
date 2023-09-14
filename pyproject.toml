@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "go-def-scoring"
+version = "0.1.0"
+description = ""
+authors = ["Andrew Green <agreen@ebi.ac.uk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+gradio = "^3.44.2"
+polars = "^0.19.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
