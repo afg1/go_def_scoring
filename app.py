@@ -19,7 +19,7 @@ def filter_on_ontology(ontology, data, cur_id):
 
     return data, cur_id, label, definition, parent, relationship
 
-def get_next(data, cur_id, acc, conf, results):
+def get_next(data, cur_id, acc, conf, struc, results):
     ## Naturally, IDs aren't sequential, so we need to find the next available one
     available_ids =set(data.get_column("internal_id").to_list())
     done_ids = set(results["internal_id"])
@@ -34,13 +34,15 @@ def get_next(data, cur_id, acc, conf, results):
     results["internal_id"].append(cur_id)
     results["accuracy"].append(acc)
     results["confidence"].append(conf)
+    results["structure_content"].append(struc)
+
     return cur_id, label, definition, parent, relationship, results
 
 
 with gr.Blocks() as iface:
     cur_id = gr.State(value=1)
     data = gr.State(value=pl.read_csv("definitions.tsv", separator='\t'))
-    results = gr.State(value={"internal_id": [], "accuracy": [], "confidence": []})
+    results = gr.State(value={"internal_id": [], "accuracy": [], "confidence": [], "structure_content": []})
 
     ## Display
     with gr.Row():
@@ -55,10 +57,11 @@ with gr.Blocks() as iface:
     with gr.Row():
         acc = gr.Radio([1,2,3,4,5], label="Accuracy")
         conf = gr.Radio([1,2,3,4,5], label="Confidence")
+        struc = gr.Radio([1,2,3,4,5], label="Structure/Content")
     with gr.Row():
         note = gr.Textbox(lines=3, label="Notes")
         sub = gr.Button(label="Submit", value="Submit")
-        sub.click(get_next, inputs=[data, cur_id, acc, conf, results], outputs=[cur_id, label, definition, parent, relationship, results])
+        sub.click(get_next, inputs=[data, cur_id, acc, conf, struc, results], outputs=[cur_id, label, definition, parent, relationship, results])
     with gr.Row():
         ontology_select = gr.Dropdown(data.value.get_column("ontology").unique().to_list(), label="Ontology")
         ontology_select.change(filter_on_ontology, inputs=[ontology_select, data, cur_id], outputs=[data, cur_id, label, definition, parent, relationship])
