@@ -13,6 +13,6 @@ RUN PATH="$PATH:/root/.local/bin" poetry install
 COPY app.py /app/app.py
 
 EXPOSE 7860
-
-ENTRYPOINT python3 app.py
+ENV GRADIO_SERVER_NAME=0.0.0.0
+CMD python3 app.py
 
