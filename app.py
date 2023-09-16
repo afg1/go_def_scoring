@@ -71,4 +71,4 @@ with gr.Blocks() as iface:
         write.click(lambda r, n: pl.DataFrame(r).write_csv(n), inputs=[results, out_name])
  
 
-iface.launch()
+iface.launch(server_name="0.0.0.0", server_port=7860, share=False)
